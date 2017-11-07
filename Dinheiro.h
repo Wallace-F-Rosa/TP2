@@ -1,20 +1,31 @@
+#include <iostream>
+using namespace std;
+
 #ifndef DINHEIRO_H
 #define DINHEIRO_H
 
 class Dinheiro
 {
     private:
-        unsigned int reais;
-        unsigned int centavos;
+        unsigned int Reais;
+        unsigned int Centavos;
 
     public:
-        Dinheiro(unsigned int reais,unsigned int centavos);
+        Dinheiro(unsigned int Reais,unsigned int Centavos);
         Dinheiro();
-        ~Dinheio();
-        unsigned getReais();
-        unsigned getCentavos();
-        void setReais(unsigned int reais);
-        void setCentavos(unsigned int centavos);
+        ~Dinheiro();
+        unsigned getReais() const;
+        unsigned getCentavos() const;
+        void setReais(unsigned int Reais);
+        void setCentavos(unsigned int Centavos);
+        Dinheiro & operator=(const Dinheiro d2);
+        Dinheiro & operator+=(const Dinheiro d2);
+        Dinheiro & operator-=(const Dinheiro d2);
+        Dinheiro operator+(const Dinheiro d2) const;
+        Dinheiro operator-(const Dinheiro d2) const;
+        Dinheiro operator*(const double c) const;
+
+        friend ostream & operator<<(ostream & os, const Dinheiro & d);
 };
 
 #endif

@@ -14,6 +14,7 @@ class Dinheiro
         Dinheiro(unsigned int Reais,unsigned int Centavos);
         Dinheiro();
         ~Dinheiro();
+        //Dinheiro(Dinheiro & d);
         unsigned getReais() const;
         unsigned getCentavos() const;
         void setReais(unsigned int Reais);

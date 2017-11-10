@@ -3,7 +3,7 @@
 
 using namespace std;
 
-//Métodos básicos
+//Métodos básicos da classe Dinheiro
 Dinheiro::Dinheiro(unsigned int Reais, unsigned int Centavos)
 {
     if(Reais < 0)
@@ -24,6 +24,12 @@ Dinheiro::~Dinheiro()
 {
 
 }
+
+/*Dinheiro::Dinheiro(Dinheiro & d)
+{
+    (*this).Reais = d.Reais;
+    (*this).Centavos = d.Centavos;
+}*/
 
 unsigned Dinheiro::getReais() const
 {
@@ -125,14 +131,14 @@ Dinheiro Dinheiro::operator*(const double c) const
     return dSub;
 }
 
-ostream & operator<<(ostream & os, Dinheiro & d)
+ostream & operator<<(ostream & os, const Dinheiro & d)
 {
     //sobrecarga do operador << utilizando a classe ostream
     
     os << "R$" << d.getReais() << ","<<d.getCentavos();//retornamos uma saída com o formato desejado
     return os;
 }
-
+/*
 int main()
 {
     Dinheiro d(10,10);
@@ -149,5 +155,5 @@ int main()
     d-= d2*3;
     cout << d << endl;
     return 0;
-}
+}*/
 

@@ -1,8 +1,12 @@
-#include <iostream>
-using namespace std;
+
+
 
 #ifndef DINHEIRO_H
 #define DINHEIRO_H
+
+#include <iostream>
+
+using namespace std;
 
 class Dinheiro
 {

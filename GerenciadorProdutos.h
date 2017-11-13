@@ -3,6 +3,7 @@
 
 #include "Produto.h"
 
+
 class GerenciadorProdutos
 {
     private:
@@ -19,6 +20,7 @@ class GerenciadorProdutos
         Produto getProduto(int codigo) const;
         Produto getIesimoProduto(int i) const;
         int getNumProdutosCadastrados() const;
+        void leProdutoDoTeclado(Produto &p);
 };
 
 #endif

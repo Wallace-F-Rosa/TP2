@@ -1,7 +1,7 @@
 all: main.exe
 
 main.exe: Dinheiro.o Produto.o GerenciadorProdutos.o main.o 
-	g++  main.o Dinheiro.o Produto.o -o main.exe
+	g++  main.o Dinheiro.o Produto.o GerenciadorProdutos.o -o main.exe
 
 GerenciadorProdutos.o: GerenciadorProdutos.h GerenciadorProdutos.cpp
 	g++ -c GerenciadorProdutos.cpp 

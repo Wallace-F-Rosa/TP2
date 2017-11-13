@@ -1,5 +1,4 @@
 #include "Dinheiro.h"
-#include <iostream>
 
 using namespace std;
 
@@ -24,8 +23,8 @@ Dinheiro::~Dinheiro()
 {
 
 }
-
-/*Dinheiro::Dinheiro(Dinheiro & d)
+/*
+Dinheiro::Dinheiro(Dinheiro & d)
 {
     (*this).Reais = d.Reais;
     (*this).Centavos = d.Centavos;
@@ -135,10 +134,11 @@ ostream & operator<<(ostream & os, const Dinheiro & d)
 {
     //sobrecarga do operador << utilizando a classe ostream
     
-    os << "R$" << d.getReais() << ","<<d.getCentavos();//retornamos uma saída com o formato desejado
+    os << "R$" << d.getReais() << ","<<d.getCentavos()/10<<d.getCentavos()%10;//retornamos uma saída com o formato desejado
     return os;
 }
 /*
+//Teste das operacoes
 int main()
 {
     Dinheiro d(10,10);

@@ -36,9 +36,35 @@ int main()
             g.leProdutoDoTeclado(p);
             g.armazenaProduto(p);
         }
-        else if()
+        else if(opcao == 2)
         {
-            ;
+            g.listarProdutos();
+        }
+        else if(opcao == 3)
+        {
+            int codigo;
+            cout << "Informe o codigo do produto que deseja remover:";
+            cin >> codigo;
+            g.removeProduto(codigo);
+        }
+        else if(opcao == 4)
+        {
+            g.removeTodosProdutos();
+        }
+        else if(opcao == 5)
+        {
+            int codigo;
+            cout << "Informe o codigo do produto para consulta :";
+            cin >> codigo;
+            cout << g.getProduto(codigo);
+        }
+        else if(opcao == 6)
+        {
+            break;
+        }
+        else if(opcao == 3)
+        {
+            cerr<<"Opcao invalida!"<<endl;
         }
         
 

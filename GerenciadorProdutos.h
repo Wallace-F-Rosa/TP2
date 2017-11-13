@@ -21,6 +21,7 @@ class GerenciadorProdutos
         Produto getIesimoProduto(int i) const;
         int getNumProdutosCadastrados() const;
         void leProdutoDoTeclado(Produto &p);
+        void listarProdutos() const;
 };
 
 #endif

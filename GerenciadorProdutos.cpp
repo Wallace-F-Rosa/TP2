@@ -28,6 +28,13 @@ GerenciadorProdutos::GerenciadorProdutos(int MaxProdutos)
             fin.read(reinterpret_cast<char*>(&MaxProdutos),sizeof(int));
             cout << "Total de produtos : " << MaxProdutos << endl;
             fin.read(reinterpret_cast<char*>(Lista),sizeof(p)*MaxProdutos);
+            
+            for(int i = 0; i < MaxProdutos; i++)
+            {
+                if(Lista[i].getCodigo() != -1)
+                    ProdutosCadastrados++;
+            }
+            
         }
         else
         {

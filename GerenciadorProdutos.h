@@ -2,6 +2,7 @@
 #define GERENCIADORPRODUTOS_H
 
 #include "Produto.h"
+#include <fstream>
 
 
 class GerenciadorProdutos

@@ -1,5 +1,5 @@
 #include <iostream>
-#include<fstream>
+
 
 using namespace std;
 
@@ -83,7 +83,6 @@ int main()
         cin >> opcao;
     }
 
-    cout << "Obrigado por usar o sistema! Volte sempre (~*w*)~"<<endl;
     return 0;
     
 }

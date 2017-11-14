@@ -6,10 +6,67 @@ GerenciadorProdutos::GerenciadorProdutos(int MaxProdutos)
     (*this).MaxProdutos = MaxProdutos;
     Lista = new Produto[MaxProdutos];
     ProdutosCadastrados = 0;
+
+    ifstream fin("dados.dat",ios::binary);
+
+    if(fin.is_open())
+    {
+        //arquivo de banco de dados existe
+        clog<<"Arquivo de banco de dados existente: dados.dat"<<endl;
+        clog<<"Buscando produtos já cadastrados..."<<endl;
+        fin.seekg(0,ios::end);
+        int tamArquivo = fin.tellg();
+
+        //se houver produtos devemos buscá-los no arquivo
+        if(tamArquivo > 0)
+        {
+            
+            for(int i = 0; i < MaxProdutos; i++)
+            {
+                Produto p;
+                fin.read(reinterpret_cast<char*>(&p),sizeof(Produto));
+                g.armazenaProduto(p);
+                if(p.getCodigo() != -1)
+                    ProdutosCadastrados++;
+            }
+            clog<<"Produtos anteriormente cadastrados foram carregados!"<<endl;
+        }
+        else
+        {
+            clog<<"Arquivo sem produtos!"<<endl;
+        }
+    }
+    else
+    {
+        clog<<"Arquivo de armazenamento dados.dat não existe."<<endl;
+        clog<<"Dados cadastrados serão armazenados ao finalizar o programa."<<endl;
+    }
+    fin.close();
 }
 
 GerenciadorProdutos::~GerenciadorProdutos()
 {
+    ofstream fout("dados.dat",ios::binary);
+
+    if(!fout.is_open())
+    {
+        cerr << "Erro ao abrir arquivo de armazenamento dados.dat!"<<endl;
+    }
+    else
+    {
+        clog << "Armazenando os produtos cadastrados no arquivo dados.dat..."<<endl;
+
+        //fout.write(reinterpret_cast<char*>(Lista),sizeof(Produto)*MaxProdutos);
+        for(int i = 0; i < MaxProdutos; i++)
+        {
+            Produto p = Lista[i];
+            fout.write(reinterpret_cast<char*>(&p),sizeof(Produto));
+        }
+        
+        clog << "Dados Armazenados com sucesso"<<endl;
+    }
+    cout << "Obrigado por usar o sistema! Volte sempre (~*w*)~"<<endl;
+    fout.close();
     delete [] Lista;
 }
 
@@ -152,6 +209,11 @@ void GerenciadorProdutos::leProdutoDoTeclado(Produto &p)
 void GerenciadorProdutos::listarProdutos() const
 {
     cout<<endl;
+    if(ProdutosCadastrados == 0)
+    {
+        cout << "Nao ha produtos cadastrados!"<<endl;
+        return;
+    }
     for(int i = 0; i < ProdutosCadastrados; i++)
     {
         cout << Lista[i] <<endl;

@@ -64,7 +64,7 @@ Dinheiro Produto::getPrecoVenda() const
     //como a margem de lucro é dada em porcentagem %
     //devemos multipĺicar PrecoCusto por (1+margemLucro) para acrescentar
     //o valor da margem de lucro no dinheiro retornado
-    Dinheiro PrecoVenda(PrecoCusto * (1+(MargemLucro/100)));
+    Dinheiro PrecoVenda(PrecoCusto * (1+MargemLucro));
     return PrecoVenda;
 }
 
@@ -81,44 +81,6 @@ double Produto::getMargemLucro() const
 int Produto::getCodigo() const
 {
     return Codigo;
-}
-
-Produto leProdutoDoTeclado()
-{
-    //le um produto a patir de valores digitados no teclado e o retorna
-    int codigo;
-    char * nome = new char[50];
-    Dinheiro precoCusto;
-    double margemLucro;
-    Dinheiro impostoMunicipal;
-    unsigned int centavos, reais;
-
-    char aux;
-
-    cout << "Digite o codigo do produto : ";
-    cin >> codigo;
-
-    cout << "Digite o nome do produto : ";
-    cin.ignore();
-    cin.getline(nome,49);
-            
-    cout << "Digite o preco do produto, separando os centavos com virgula( Ex : 1,00) : ";
-    cin >> reais >> aux >> centavos;
-    precoCusto.setCentavos(centavos);
-    precoCusto.setReais(reais);
-
-    cout << "Digite a margem de lucro do produto (%) : "<<endl;
-    cin >> margemLucro;
-
-    cout << "Digite o valor do imposto municipal( Ex : 1,00) : ";
-    cin >> centavos >> aux >> reais;
-    impostoMunicipal.setCentavos(centavos);
-    impostoMunicipal.setReais(reais);
-
-    //cria o produto com os valores obtidos do teclado
-    Produto p(codigo,nome,precoCusto,margemLucro,impostoMunicipal);
-
-    return p; // retorna os produtos
 }
 
 

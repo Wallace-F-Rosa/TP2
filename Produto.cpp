@@ -64,7 +64,7 @@ Dinheiro Produto::getPrecoVenda() const
     //como a margem de lucro é dada em porcentagem %
     //devemos multipĺicar PrecoCusto por (1+margemLucro) para acrescentar
     //o valor da margem de lucro no dinheiro retornado
-    Dinheiro PrecoVenda(PrecoCusto * (1+MargemLucro));
+    Dinheiro PrecoVenda(PrecoCusto * (1+(MargemLucro/100)));
     return PrecoVenda;
 }
 

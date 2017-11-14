@@ -1,13 +1,16 @@
 
 #include "GerenciadorProdutos.h"
 
+
+
 GerenciadorProdutos::GerenciadorProdutos(int MaxProdutos)
 {
     (*this).MaxProdutos = MaxProdutos;
     Lista = new Produto[MaxProdutos];
     ProdutosCadastrados = 0;
 
-    ifstream fin("dados.dat",ios::binary);
+    ifstream fin;
+    fin.open("dados.dat",ios::binary);
 
     if(fin.is_open())
     {
@@ -17,19 +20,14 @@ GerenciadorProdutos::GerenciadorProdutos(int MaxProdutos)
         fin.seekg(0,ios::end);
         int tamArquivo = fin.tellg();
 
+        fin.seekg(0,ios::beg);
         //se houver produtos devemos buscá-los no arquivo
         if(tamArquivo > 0)
         {
-            
-            for(int i = 0; i < MaxProdutos; i++)
-            {
-                Produto p;
-                fin.read(reinterpret_cast<char*>(&p),sizeof(Produto));
-                g.armazenaProduto(p);
-                if(p.getCodigo() != -1)
-                    ProdutosCadastrados++;
-            }
-            clog<<"Produtos anteriormente cadastrados foram carregados!"<<endl;
+            Produto p;
+            fin.read(reinterpret_cast<char*>(&MaxProdutos),sizeof(int));
+            cout << "Total de produtos : " << MaxProdutos << endl;
+            fin.read(reinterpret_cast<char*>(Lista),sizeof(p)*MaxProdutos);
         }
         else
         {
@@ -44,9 +42,21 @@ GerenciadorProdutos::GerenciadorProdutos(int MaxProdutos)
     fin.close();
 }
 
+GerenciadorProdutos::GerenciadorProdutos(GerenciadorProdutos &g)
+{
+    Lista = new Produto[g.MaxProdutos];
+    MaxProdutos = g.MaxProdutos;
+    ProdutosCadastrados = g.ProdutosCadastrados;
+    for(int i = 0; i < g.MaxProdutos;i++)
+    {
+        Lista[i] = g.Lista[i];
+    }
+}
+
 GerenciadorProdutos::~GerenciadorProdutos()
 {
-    ofstream fout("dados.dat",ios::binary);
+    ofstream fout;
+    fout.open("dados.dat",ios::binary);
 
     if(!fout.is_open())
     {
@@ -54,18 +64,18 @@ GerenciadorProdutos::~GerenciadorProdutos()
     }
     else
     {
-        clog << "Armazenando os produtos cadastrados no arquivo dados.dat..."<<endl;
+        //clog << "Armazenando os produtos cadastrados no arquivo dados.dat..."<<endl;
 
-        //fout.write(reinterpret_cast<char*>(Lista),sizeof(Produto)*MaxProdutos);
-        for(int i = 0; i < MaxProdutos; i++)
-        {
-            Produto p = Lista[i];
-            fout.write(reinterpret_cast<char*>(&p),sizeof(Produto));
-        }
+        fout.write(reinterpret_cast<char*>(&MaxProdutos),sizeof(int));
+       
+        Produto p;
+        cout << "OK" << endl;
+        cout << p << endl;
+        fout.write(reinterpret_cast<char*>(Lista),sizeof(p)*MaxProdutos);
         
-        clog << "Dados Armazenados com sucesso"<<endl;
+        //clog << "Dados Armazenados com sucesso"<<endl;
     }
-    cout << "Obrigado por usar o sistema! Volte sempre (~*w*)~"<<endl;
+    //cout << "Obrigado por usar o sistema! Volte sempre (~*w*)~"<<endl;
     fout.close();
     delete [] Lista;
 }

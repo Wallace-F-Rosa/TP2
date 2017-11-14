@@ -62,7 +62,7 @@ int main()
         {
             break;
         }
-        else if(opcao == 3)
+        else
         {
             cerr<<"Opcao invalida!"<<endl;
         }

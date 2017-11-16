@@ -38,6 +38,7 @@ int main()
         }
         else if(opcao == 2)
         {
+            //cout << g <<endl;
             g.listarProdutos();
         }
         else if(opcao == 3)

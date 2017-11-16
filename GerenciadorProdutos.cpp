@@ -6,12 +6,15 @@
 GerenciadorProdutos::GerenciadorProdutos(int MaxProdutos)
 {
     (*this).MaxProdutos = MaxProdutos;
-    Lista = new Produto[MaxProdutos];
+    Lista = new Produto[(*this).MaxProdutos];
     ProdutosCadastrados = 0;
 
+    //construtor chamado, devemos carregar dados anteriormente salvos, se existirem
     ifstream fin;
+    //abre o arquivo de entrada em "modo binário"
     fin.open("dados.dat",ios::binary);
 
+    //checa se o arquivo está aberto
     if(fin.is_open())
     {
         //arquivo de banco de dados existe
@@ -19,26 +22,78 @@ GerenciadorProdutos::GerenciadorProdutos(int MaxProdutos)
         clog<<"Buscando produtos já cadastrados..."<<endl;
         fin.seekg(0,ios::end);
         int tamArquivo = fin.tellg();
-
         fin.seekg(0,ios::beg);
         //se houver produtos devemos buscá-los no arquivo
         if(tamArquivo > 0)
         {
-            Produto p;
-            fin.read(reinterpret_cast<char*>(&MaxProdutos),sizeof(int));
-            cout << "Total de produtos : " << MaxProdutos << endl;
-            fin.read(reinterpret_cast<char*>(Lista),sizeof(p)*MaxProdutos);
+            fin.read(reinterpret_cast<char*>(&ProdutosCadastrados),sizeof(int));
             
-            for(int i = 0; i < MaxProdutos; i++)
+            //se o usuário solicitar um numero maximo de produtos menor do que o que já estava armazenado
+            if(ProdutosCadastrados > MaxProdutos)
             {
-                if(Lista[i].getCodigo() != -1)
-                    ProdutosCadastrados++;
+                char opcao;
+                while(true)
+                {
+                    //perguntamos ao usuário se ele quer carregar todos os produtos armazenados ou somente a quantidade informada
+                    cout << "Ha "<<ProdutosCadastrados << " produtos armazenados mas foi solicitado um numero maximo de "<<MaxProdutos << " produto(s)" <<endl;
+                    cout << "Deseja carregar todos os produtos ou continuar com "<<MaxProdutos << " prouduto(s)?(os produtos excedentes serão excluidos)"<<endl;
+                    cout << "(s = sim/ n = nao)"<<endl;
+                    cin >> opcao;
+                    if(opcao == 's')
+                    {
+                        break;
+                    }
+                    else if(opcao == 'n')
+                    {
+                        break;
+                    }
+                    else
+                        cerr << "Opcao inválida!" <<endl;
+                }
+                //efetuamos a opcao informada
+                if(opcao == 'n')
+                    ProdutosCadastrados = MaxProdutos;
+                else
+                {
+                    //se o usuário quiser carregar todos os produtos anteriormente armazenados, perguntamos se ele deseja carregar mais produtos
+                    MaxProdutos = ProdutosCadastrados;
+                    cout << "Deseja aumentar a quantidade de produtos armazenados?(Se sim informe o numero de produtos a aumentar, se nao digite um numero menor ou igual a zero) : "<<endl;
+                    int max;
+                    cin >> max;
+                    if(max > 0)
+                       MaxProdutos += max;
+
+                    (*this).MaxProdutos = MaxProdutos;
+                    delete [] Lista;
+                    Lista = new Produto[(*this).MaxProdutos];
+                }
             }
-            
-        }
-        else
-        {
-            clog<<"Arquivo sem produtos!"<<endl;
+            //entrada de dados
+            for(int i = 0; i < ProdutosCadastrados;i++)
+            {
+                //criamos variaveis para os dados anteriormente salvos
+                int codigo;
+                char * nome = new char[50];
+                Dinheiro precoC;
+                double margemL;
+                Dinheiro impostoM;
+
+                //carregamos os dados propriamente ditos
+                fin.read(reinterpret_cast<char*>(&codigo),sizeof(int));
+                fin.read(reinterpret_cast<char*>(nome),sizeof(char)*50);
+                fin.read(reinterpret_cast<char*>(&precoC),sizeof(Dinheiro));
+                fin.read(reinterpret_cast<char*>(&margemL),sizeof(double));
+                fin.read(reinterpret_cast<char*>(&impostoM),sizeof(Dinheiro));
+
+                //criamos o produto referente aos dados armazenados
+                Produto p(codigo,nome,precoC,margemL,impostoM);
+                
+                //armazenamos o produto no vetor
+                Lista[i] = p;
+
+                delete [] nome;
+            }
+            clog << ProdutosCadastrados << " produtos foram carregados."<<endl;    
         }
     }
     else
@@ -51,6 +106,7 @@ GerenciadorProdutos::GerenciadorProdutos(int MaxProdutos)
 
 GerenciadorProdutos::GerenciadorProdutos(GerenciadorProdutos &g)
 {
+    //construtor de cópia
     Lista = new Produto[g.MaxProdutos];
     MaxProdutos = g.MaxProdutos;
     ProdutosCadastrados = g.ProdutosCadastrados;
@@ -62,27 +118,51 @@ GerenciadorProdutos::GerenciadorProdutos(GerenciadorProdutos &g)
 
 GerenciadorProdutos::~GerenciadorProdutos()
 {
+    //destrutor chamado, deve-se salvar os produtos cadastrados
+    
     ofstream fout;
+    //abre o arquivo em "modo binário"
     fout.open("dados.dat",ios::binary);
 
+    //checa se o arquivo esta aberto
     if(!fout.is_open())
     {
         cerr << "Erro ao abrir arquivo de armazenamento dados.dat!"<<endl;
     }
     else
     {
-        //clog << "Armazenando os produtos cadastrados no arquivo dados.dat..."<<endl;
+        //se sim, inicia o armazenamento dos dados
+        clog << "Armazenando os produtos cadastrados no arquivo dados.dat..."<<endl;
 
-        fout.write(reinterpret_cast<char*>(&MaxProdutos),sizeof(int));
-       
-        Produto p;
-        cout << "OK" << endl;
-        cout << p << endl;
-        fout.write(reinterpret_cast<char*>(Lista),sizeof(p)*MaxProdutos);
-        
-        //clog << "Dados Armazenados com sucesso"<<endl;
+        //armazena-se a quantidade de produtos cadastrados
+        fout.write(reinterpret_cast<char*>(&ProdutosCadastrados),sizeof(int));
+
+        //armazena os produtos em si
+        for(int i = 0; i < ProdutosCadastrados;i++)
+        {   
+            //quebrando os dados do produto em variaveis
+            int codigo = Lista[i].getCodigo();
+            char * nome = new char[50];
+            strcpy(nome,Lista[i].getNome());
+            Dinheiro precoC = Lista[i].getPrecoCusto();
+            double margemL = Lista[i].getMargemLucro();
+            Dinheiro impostoM = Lista[i].getImpostoMunicipal();
+            
+            //armazenando os dados do produto no arquivo
+            fout.write(reinterpret_cast<char*>(&codigo),sizeof(int));
+            fout.write(reinterpret_cast<char*>(nome),sizeof(char)*50);
+            fout.write(reinterpret_cast<char*>(&precoC),sizeof(Dinheiro));
+            fout.write(reinterpret_cast<char*>(&margemL),sizeof(double));
+            fout.write(reinterpret_cast<char*>(&impostoM),sizeof(Dinheiro));
+
+            //libera memória para novo nome
+            delete [] nome;
+        }
+        clog << "Produtos cadastrados : "<<ProdutosCadastrados <<endl;
+        clog << "Dados Armazenados com sucesso!"<<endl;
     }
-    //cout << "Obrigado por usar o sistema! Volte sempre (~*w*)~"<<endl;
+    //dados armazenados, fecha o arquivo e limpa a memória
+    cout << "Obrigado por usar o sistema! Volte sempre (~*w*)~"<<endl;
     fout.close();
     delete [] Lista;
 }
@@ -104,7 +184,7 @@ void GerenciadorProdutos::armazenaProduto(Produto &p)
             return;
         }
         //substitui o produto na posição devida e da um "backspace" no resto da lista para mantê-la ordenada
-        if(Lista[i].getCodigo() ==-1 ||  (Lista[i].getCodigo() > p.getCodigo()))
+        if((Lista[i].getCodigo() ==-1 && p.getCodigo() != -1) ||  (Lista[i].getCodigo() > p.getCodigo()))
         {
             aux = Lista[i];
             Lista[i] = p;
@@ -145,6 +225,7 @@ void GerenciadorProdutos::removeProduto(int codigo)
 void GerenciadorProdutos::removeTodosProdutos()
 {
     delete [] Lista;
+    ProdutosCadastrados = 0;
     Lista = new Produto[MaxProdutos];
 }
 
@@ -222,6 +303,7 @@ void GerenciadorProdutos::leProdutoDoTeclado(Produto &p)
     p = p1;
 
 }
+
 
 void GerenciadorProdutos::listarProdutos() const
 {

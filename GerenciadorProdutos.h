@@ -14,6 +14,7 @@ class GerenciadorProdutos
         
     public:
         GerenciadorProdutos(int MaxProdutos);
+        GerenciadorProdutos(GerenciadorProdutos & g);
         ~GerenciadorProdutos();
         void armazenaProduto(Produto &p);
         void removeProduto(int codigo);
@@ -23,6 +24,7 @@ class GerenciadorProdutos
         int getNumProdutosCadastrados() const;
         void leProdutoDoTeclado(Produto &p);
         void listarProdutos() const;
+
 };
 
 #endif

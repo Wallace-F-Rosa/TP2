@@ -25,6 +25,8 @@ class GerenciadorProdutos
         void leProdutoDoTeclado(Produto &p);
         void listarProdutos() const;
 
+        friend int pesquisaBinaria(Produto * p, int inicio, int fim, int chave);
+
 };
 
 #endif

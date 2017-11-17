@@ -167,22 +167,58 @@ GerenciadorProdutos::~GerenciadorProdutos()
     delete [] Lista;
 }
 
+int pesquisaBinaria(Produto * p, int inicio, int fim, int chave)
+{
+    int meio = (inicio + fim)/2;
+    if (p[meio].getCodigo() == chave)
+        return meio;
+    if (inicio >= fim)
+        return -1; // não encontrado
+    else
+        if (p[meio].getCodigo() < chave)
+            return pesquisaBinaria(p,meio+1,fim,chave);
+        else
+            return pesquisaBinaria(p,meio-1,fim,chave);
+    
+}
+
+Produto GerenciadorProdutos::getProduto(int codigo) const
+{
+    cout<<endl;
+    
+    int i = pesquisaBinaria(Lista,0,ProdutosCadastrados-1,codigo);
+
+    if( i != -1)
+        return Lista[i];
+
+    Produto p;
+    return p;
+}
+
 void GerenciadorProdutos::armazenaProduto(Produto &p)
 {
-    if(ProdutosCadastrados + 1 > MaxProdutos) return;
-    
+    if(ProdutosCadastrados + 1 > MaxProdutos)
+    {
+        cout<<endl;
+        cerr<<"Capacidade maxima de produtos já foi atingida!"<<endl;
+        return; //MaxProdutos já foi atingido, ignorar mais inserções
+    }
+    int chave = p.getCodigo();
+    int j = pesquisaBinaria(Lista,0,ProdutosCadastrados-1,chave);
+
+    if(j != -1 )
+    { 
+        //produto já existe
+        cout << endl;
+        cerr<< "Já existe um produto com este codigo cadastrado!"<<endl;
+        return;
+    }
+
     Produto aux;
     ProdutosCadastrados++;
-    //implementar busca binária
-    //retorna a posição do vetor onde colocar o elemento
-    //retorna -1 se o elemento já existir
+
     for(int i = 0; i < ProdutosCadastrados; i++)
     {
-        if(Lista[i].getCodigo() == p.getCodigo())
-        {
-            cerr<<"Produto já cadastrado!"<<endl;
-            return;
-        }
         //substitui o produto na posição devida e da um "backspace" no resto da lista para mantê-la ordenada
         if((Lista[i].getCodigo() ==-1 && p.getCodigo() != -1) ||  (Lista[i].getCodigo() > p.getCodigo()))
         {
@@ -218,6 +254,8 @@ void GerenciadorProdutos::removeProduto(int codigo)
         Lista[i] = Lista[i+1];
         Lista[i+1] = aux;
     }
+
+    clog<< "Produto removido!"<<endl;
         
     ProdutosCadastrados--;
 }
@@ -229,18 +267,8 @@ void GerenciadorProdutos::removeTodosProdutos()
     Lista = new Produto[MaxProdutos];
 }
 
-Produto GerenciadorProdutos::getProduto(int codigo) const
-{
-    cout<<endl;
-    for(int i = 0; i < ProdutosCadastrados;i++)
-    {
-        if(codigo == Lista[i].getCodigo())
-            return Lista[i];
-    }
 
-    Produto p;
-    return p;
-}
+
 
 Produto GerenciadorProdutos::getIesimoProduto(int i) const
 {

@@ -234,19 +234,26 @@ void GerenciadorProdutos::removeProduto(int codigo)
     if(codigo <= 0)
     { 
         //tetar remover produto com código inválido
+        cerr<<endl;
         cerr << "Produto inexistente!"<<endl;
         return;
     }
     int i;
     Produto aux; // Produto vazio
-    for( i = 0; i < ProdutosCadastrados;i++) // procura o produto
+
+    int j = pesquisaBinaria(Lista,0,ProdutosCadastrados-1,codigo);
+
+    if(j == -1)
     {
-        if(codigo == Lista[i].getCodigo())
-        {
-            Lista[i] = aux; //apaga o produto colocando um produto vazio no lugar
-            break;
-        }
+        cerr<<endl;
+        cerr<<"Produto inexistente!" <<endl;
+        return;
     }
+
+    Lista[j] = aux;
+
+    i = j;
+
     //reordena o resto da lista para mante-la em ordem crescente
     for(; i < ProdutosCadastrados-1;i++)
     {

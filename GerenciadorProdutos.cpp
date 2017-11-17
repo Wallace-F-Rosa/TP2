@@ -301,6 +301,12 @@ int GerenciadorProdutos::getNumProdutosCadastrados() const
 
 void GerenciadorProdutos::leProdutoDoTeclado(Produto &p)
 {
+    //acrescentar codigo para validação dos dados digitados pelo usuário
+    //ver se o codigo >= 0
+    //reais e centavos >= 0
+    //margem de Lucro >= 0
+    //nome tanto faz, o usuário escolhe
+    
     cout<<endl;
     //le um produto a patir de valores digitados no teclado e o retorna
     int codigo;

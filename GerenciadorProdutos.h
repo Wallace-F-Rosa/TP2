@@ -22,7 +22,7 @@ class GerenciadorProdutos
         Produto getProduto(int codigo) const;
         Produto getIesimoProduto(int i) const;
         int getNumProdutosCadastrados() const;
-        void leProdutoDoTeclado(Produto &p);
+        void leProdutoDoTeclado();
         void listarProdutos() const;
 
         friend int pesquisaBinaria(Produto * p, int inicio, int fim, int chave);

@@ -299,7 +299,7 @@ int GerenciadorProdutos::getNumProdutosCadastrados() const
     return ProdutosCadastrados; 
 }
 
-void GerenciadorProdutos::leProdutoDoTeclado(Produto &p)
+void GerenciadorProdutos::leProdutoDoTeclado()
 {
     //acrescentar codigo para validação dos dados digitados pelo usuário
     //ver se o codigo >= 0
@@ -341,7 +341,7 @@ void GerenciadorProdutos::leProdutoDoTeclado(Produto &p)
     //cria o produto com os valores obtidos do teclado
     Produto p1(codigo,nome,precoCusto,margemLucro,impostoMunicipal);
 
-    p = p1;
+    armazenaProduto(p1);
 
 }
 

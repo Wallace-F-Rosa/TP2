@@ -32,9 +32,9 @@ int main()
 
         if(opcao == 1)
         {
-            Produto p;
-            g.leProdutoDoTeclado(p);
-            g.armazenaProduto(p);
+           
+            g.leProdutoDoTeclado();
+            
         }
         else if(opcao == 2)
         {
